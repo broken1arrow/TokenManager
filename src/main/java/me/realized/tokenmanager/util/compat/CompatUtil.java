@@ -8,14 +8,23 @@ public final class CompatUtil {
     private static final long SUB_VERSION;
 
     static {
+        final String firstPackageName = Bukkit.getServer().getBukkitVersion().split("\\.")[0];
         final String packageName = Bukkit.getServer().getBukkitVersion().split("\\.")[1];
-        SUB_VERSION = NumberUtil.parseLong(packageName.replace("-R0", "")).orElse(0);
+
+        long version = NumberUtil.parseLong(firstPackageName.replace("-R0", "")).orElse(0);
+        if (version > 25) {
+            SUB_VERSION = version;
+        } else
+            SUB_VERSION = NumberUtil.parseLong(packageName.replace("-R0", "")).orElse(0);
     }
 
-    private CompatUtil() {}
+    private CompatUtil() {
+    }
+
     public static boolean isAfter1_20() {
         return SUB_VERSION > 20;
     }
+
     public static boolean isPre1_17() {
         return SUB_VERSION < 17;
     }
